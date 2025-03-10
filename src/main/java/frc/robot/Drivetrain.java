@@ -107,7 +107,7 @@ public class Drivetrain extends SubsystemBase {
 
     // Vector length and direction
     double speedDelivered = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2)) * DriveConstants.kMaxSpeed;
-    double dirDelivered = 2 * Math.PI - Math.atan(ySpeed / xSpeed);
+    double dirDelivered = Math.atan(ySpeed / xSpeed) + Math.PI / 2;
 
     setModuleStates(new SwerveModuleState[] {
       new SwerveModuleState(speedDelivered, Rotation2d.fromRadians(dirDelivered)),
