@@ -28,25 +28,14 @@ public class Robot extends TimedRobot {
     m_drive.setDefaultCommand(
         new RunCommand(
             () -> m_drive.drive(
-                -OperatorConstants.kXSlewRateLimiter
+                OperatorConstants.kXSlewRateLimiter
                     .calculate(MathUtil.applyDeadband(m_controller.getLeftY(), OperatorConstants.kStickDeadband)),
                 -OperatorConstants.kYSlewRateLimiter
                     .calculate(MathUtil.applyDeadband(m_controller.getLeftX(), OperatorConstants.kStickDeadband)),
                 -OperatorConstants.kTSlewRateLimiter
                     .calculate(MathUtil.applyDeadband(m_controller.getRightX(), OperatorConstants.kStickDeadband)),
-                true),
+                false),
             m_drive));
-    
-    // m_drive.setDefaultCommand(
-    //     new RunCommand(
-    //         () -> m_drive.driveHardcode(
-    //             -OperatorConstants.kXSlewRateLimiter
-    //                 .calculate(MathUtil.applyDeadband(m_controller.getLeftY(), OperatorConstants.kStickDeadband)),
-    //             -OperatorConstants.kYSlewRateLimiter
-    //                 .calculate(MathUtil.applyDeadband(m_controller.getLeftX(), OperatorConstants.kStickDeadband)),
-    //             -OperatorConstants.kTSlewRateLimiter
-    //                 .calculate(MathUtil.applyDeadband(m_controller.getRightX(), OperatorConstants.kStickDeadband))),
-    //         m_drive));
   }
 
   @Override

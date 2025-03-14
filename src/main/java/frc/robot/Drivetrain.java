@@ -91,32 +91,6 @@ public class Drivetrain extends SubsystemBase {
     setModuleStates(swerveModuleStates);
   }
 
-  // Really bad hardcode, but this is the fallback
-  public void driveHardcode(double xSpeed, double ySpeed, double rot) {
-    if (rot != 0) {
-      double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
-      setModuleStates(new SwerveModuleState[] {
-        new SwerveModuleState(rotDelivered, Rotation2d.fromDegrees(-45)),
-        new SwerveModuleState(rotDelivered, Rotation2d.fromDegrees(45)),
-        new SwerveModuleState(rotDelivered, Rotation2d.fromDegrees(45)),
-        new SwerveModuleState(rotDelivered, Rotation2d.fromDegrees(-45))
-      });
-
-      return;
-    }
-
-    // Vector length and direction
-    double speedDelivered = Math.sqrt(Math.pow(xSpeed, 2) + Math.pow(ySpeed, 2)) * DriveConstants.kMaxSpeed;
-    double dirDelivered = Math.atan2(ySpeed, xSpeed) + Math.PI / 2;
-
-    setModuleStates(new SwerveModuleState[] {
-      new SwerveModuleState(speedDelivered, Rotation2d.fromRadians(dirDelivered)),
-      new SwerveModuleState(speedDelivered, Rotation2d.fromRadians(dirDelivered)),
-      new SwerveModuleState(speedDelivered, Rotation2d.fromRadians(dirDelivered)),
-      new SwerveModuleState(speedDelivered, Rotation2d.fromRadians(dirDelivered))
-    });
-  }
-
   public void setStationary() {
     setModuleStates(new SwerveModuleState[] {
       new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
@@ -129,10 +103,10 @@ public class Drivetrain extends SubsystemBase {
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kMaxSpeed);
 
-    m_frontLeft.setDesiredState(desiredStates[0]);
-    m_frontRight.setDesiredState(desiredStates[1]);
-    m_backLeft.setDesiredState(desiredStates[2]);
-    m_backRight.setDesiredState(desiredStates[3]);
+    m_frontLeft.setDesiredState(desiredStates[1]);
+    m_frontRight.setDesiredState(desiredStates[0]);
+    m_backLeft.setDesiredState(desiredStates[3]);
+    m_backRight.setDesiredState(desiredStates[2]);
   }
 
   public void resetEncoders() {
