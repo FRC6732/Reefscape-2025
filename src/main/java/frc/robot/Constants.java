@@ -16,10 +16,11 @@ public final class Constants {
     public static final SlewRateLimiter kXSlewRateLimiter = new SlewRateLimiter(3);
     public static final SlewRateLimiter kYSlewRateLimiter = new SlewRateLimiter(3);
     public static final SlewRateLimiter kTSlewRateLimiter = new SlewRateLimiter(3);
+    public static final SlewRateLimiter kLiftSlewRateLimiter = new SlewRateLimiter(3);
   }
 
   public static final class DriveConstants {
-    public static final double kMaxSpeed = 4; // m / s
+    public static final double kMaxSpeed = 5; // m / s
     public static final double kMaxAngularSpeed = Math.PI; // radians / s
 
     // Distance between left and right wheels
@@ -46,6 +47,14 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 2;
     public static final int kBackLeftTurningCanId = 6;
     public static final int kBackRightTurningCanId = 8;
+  }
+
+  public static final class LiftConstants {
+    public static final int kLeftCanId = 9;
+    public static final int kRightCanId = 10;
+
+    public static final double kLiftSpeed = 0.5;
+    public static final double kLiftConstant = 0.1;
   }
 
   public static final class ModuleConstants {

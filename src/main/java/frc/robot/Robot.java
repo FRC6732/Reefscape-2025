@@ -11,6 +11,7 @@ import frc.robot.Constants.OperatorConstants;
 
 public class Robot extends TimedRobot {
   private final Drivetrain m_drive = new Drivetrain();
+  private final LiftSubsystem m_lift = new LiftSubsystem();
   private final XboxController m_controller = new XboxController(OperatorConstants.kDriverControllerPort);
 
   private void configureBindings() {
@@ -34,8 +35,14 @@ public class Robot extends TimedRobot {
                     .calculate(MathUtil.applyDeadband(m_controller.getLeftX(), OperatorConstants.kStickDeadband)),
                 -OperatorConstants.kTSlewRateLimiter
                     .calculate(MathUtil.applyDeadband(m_controller.getRightX(), OperatorConstants.kStickDeadband)),
-                false),
+                true),
             m_drive));
+
+    m_lift.setDefaultCommand(
+        new RunCommand(
+            () -> m_lift.move(OperatorConstants.kLiftSlewRateLimiter
+                .calculate(m_controller.getRightTriggerAxis() - m_controller.getLeftTriggerAxis())),
+            m_lift));
   }
 
   @Override
