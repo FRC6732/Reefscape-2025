@@ -50,7 +50,7 @@ public final class Constants {
 
   public static final class ModuleConstants {
     // Some motor and gearbox constants
-    public static final double kMotorFreeSpeedRpm = 5676;
+    public static final double kMotorFreeSpeedRps = 5676.0 / 60.0;
     public static final double kDrivingMotorReduction = (50 * 17 * 45) / (14 * 27 * 15);
     
     // Some physical dimensions
@@ -63,6 +63,6 @@ public final class Constants {
     // Radians/rotation : using a absolte encoder, a full circle in radians
     public static final double kTurningFactor = Math.PI * 2;
     // FF : 1 divided by freespeed from converted to rps
-    public static final double kDrivingFF = 60 / kMotorFreeSpeedRpm;
+    public static final double kDrivingFF = kDrivingMotorReduction / (kMotorFreeSpeedRps * kWheelCircumference);
   }
 }
