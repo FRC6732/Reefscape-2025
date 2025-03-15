@@ -12,7 +12,6 @@ public final class Configs {
   static {
     // Drive motor configs
     kDrivingConfig
-        .inverted(true)
         .idleMode(IdleMode.kBrake) // Stop during no input
         .smartCurrentLimit(40); // Max amps before stall
 
@@ -22,7 +21,7 @@ public final class Configs {
 
     kDrivingConfig.closedLoop
         .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-        .pid(0, 0, 0) // gains
+        .pid(0.06, 0, 0) // gains
         .velocityFF(ModuleConstants.kDrivingFF)
         .outputRange(-1, 1);
 
@@ -38,7 +37,7 @@ public final class Configs {
 
     kTurningConfig.closedLoop
         .feedbackSensor(FeedbackSensor.kAbsoluteEncoder)
-        .pid(0, 0, 0) // gains
+        .pid(.8, 0, 0) // gains
         .outputRange(-1, 1)
         // Allow the controller to go through 0 when mapping (340 -> 15 adjusts 35
         // degrees rather than 325)

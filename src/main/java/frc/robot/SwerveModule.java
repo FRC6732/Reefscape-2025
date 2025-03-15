@@ -47,7 +47,7 @@ public class SwerveModule {
     m_drivingController = m_drivingMotor.getClosedLoopController();
     m_turningController = m_turningMotor.getClosedLoopController();
 
-    m_drivingMotor.configure(Configs.kDrivingConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_drivingMotor.configure(Configs.kDrivingConfig, ResetMode.kNoResetSafeParameters, PersistMode.kPersistParameters);
     m_turningMotor.configure(Configs.kTurningConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     m_rotationOffset = rotationOffset;

@@ -46,7 +46,7 @@ public class Drivetrain extends SubsystemBase {
       });
 
   private Rotation2d getGyroRotation() {
-    return Rotation2d.fromDegrees(360 - m_gyro.getAngle()); // invert the gyro
+    return Rotation2d.fromDegrees(m_gyro.getAngle()); // invert the gyro
   }
 
   @Override
