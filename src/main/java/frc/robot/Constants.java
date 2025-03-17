@@ -49,12 +49,16 @@ public final class Constants {
     public static final int kBackRightTurningCanId = 8;
   }
 
-  public static final class LiftConstants {
-    public static final int kLeftCanId = 9;
-    public static final int kRightCanId = 10;
+  public static final class CoralConstants {
+    public static final int kLeftLiftCanId = 9;
+    public static final int kRightLiftCanId = 10;
+
+    public static final int kBlockCanId = 11;
 
     public static final double kLiftSpeed = 0.5;
     public static final double kLiftConstant = 0.1;
+
+    public static final double kBlockConstant = 0.05;
   }
 
   public static final class ModuleConstants {

@@ -11,7 +11,7 @@ import frc.robot.Constants.OperatorConstants;
 
 public class Robot extends TimedRobot {
   private final Drivetrain m_drive = new Drivetrain();
-  private final LiftSubsystem m_lift = new LiftSubsystem();
+  private final CoralSubsystem m_lift = new CoralSubsystem();
   private final XboxController m_controller = new XboxController(OperatorConstants.kDriverControllerPort);
 
   private void configureBindings() {
@@ -19,6 +19,11 @@ public class Robot extends TimedRobot {
         .whileTrue(new RunCommand(
             () -> m_drive.setStationary(),
             m_drive));
+
+    new JoystickButton(m_controller, Button.kX.value)
+        .whileTrue(new RunCommand(
+            () -> m_lift.release(),
+            m_lift));
   }
 
   @Override
