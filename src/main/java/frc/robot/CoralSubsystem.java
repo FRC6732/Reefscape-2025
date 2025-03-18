@@ -55,7 +55,7 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void release() {
-    m_block.set(-1);
+    m_block.set(-.35);
   }
 
   @Override

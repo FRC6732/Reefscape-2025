@@ -58,7 +58,7 @@ public final class Constants {
     public static final double kLiftSpeed = 0.5;
     public static final double kLiftConstant = 0.1;
 
-    public static final double kBlockConstant = 0.05;
+    public static final double kBlockConstant = 0.15;
   }
 
   public static final class ModuleConstants {
