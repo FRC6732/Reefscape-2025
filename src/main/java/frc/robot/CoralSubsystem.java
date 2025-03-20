@@ -7,6 +7,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
 
@@ -15,12 +16,14 @@ public class CoralSubsystem extends SubsystemBase {
   private final SparkMax m_rightCarriage;
 
   private final SparkMax m_block;
+  private final DigitalInput m_limitSwitch;
 
   public CoralSubsystem() {
     m_leftCarriage = new SparkMax(CoralConstants.kLeftLiftCanId, MotorType.kBrushed);
     m_rightCarriage = new SparkMax(CoralConstants.kRightLiftCanId, MotorType.kBrushed);
 
     m_block = new SparkMax(CoralConstants.kBlockCanId, MotorType.kBrushed);
+    m_limitSwitch = new DigitalInput(CoralConstants.kLiftLimitSwitchDioId);
 
     SparkMaxConfig leftConfig = new SparkMaxConfig();
     SparkMaxConfig rightConfig = new SparkMaxConfig();
@@ -48,10 +51,10 @@ public class CoralSubsystem extends SubsystemBase {
   }
 
   public void move(double direction) {
-    double directionDelivered = direction * CoralConstants.kLiftSpeed + CoralConstants.kLiftConstant;
+    double directionDelivered = Math.min(direction * CoralConstants.kLiftSpeed + CoralConstants.kLiftConstant, m_limitSwitch.get() ? CoralConstants.kLiftConstant : 1);
 
     m_leftCarriage.set(directionDelivered);
-    m_rightCarriage.set(directionDelivered);
+    // m_rightCarriage.set(directionDelivered);
   }
 
   public void release() {
