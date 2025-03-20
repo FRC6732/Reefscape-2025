@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -54,8 +55,9 @@ public final class Constants {
     public static final int kRightLiftCanId = 10;
 
     public static final int kBlockCanId = 11;
+    public static final int kLiftLimitSwitchDioId = 0;
 
-    public static final double kLiftSpeed = 0.5;
+    public static final double kLiftSpeed = 0.25;
     public static final double kLiftConstant = 0.1;
 
     public static final double kBlockConstant = 0.15;
@@ -77,5 +79,15 @@ public final class Constants {
     public static final double kTurningFactor = Math.PI * 2;
     // FF : 1 divided by freespeed from converted to rps
     public static final double kDrivingFF = kDrivingMotorReduction / (kMotorFreeSpeedRps * kWheelCircumference);
+  }
+
+  public static final class AutoConstants{
+    public static final double kMaxSpeed = 3;
+    public static final double kMaxAcceleration = 3;
+    public static final double kMaxAngularSpeed = Math.PI;
+    public static final double kMaxAngularAcceleration = Math.PI;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+      kMaxAngularSpeed, kMaxAngularAcceleration);
   }
 }
