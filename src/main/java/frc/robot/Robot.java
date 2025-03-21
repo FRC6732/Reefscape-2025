@@ -2,8 +2,6 @@ package frc.robot;
 
 import java.util.List;
 
-import com.revrobotics.spark.SparkMax;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -23,112 +21,99 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
-import edu.wpi.first.wpilibj.Timer;
 
-public class Robot extends TimedRobot { 
-    private final Drivetrain m_drive = new Drivetrain();
-    private final CoralSubsystem m_lift = new CoralSubsystem();
-    private final XboxController m_controller = new XboxController(OperatorConstants.kDriverControllerPort);
-    private Command m_autonomousCommand;
-  
-    private void configureBindings() {
-      new JoystickButton(m_controller, Button.kRightBumper.value)
-          .whileTrue(new RunCommand(
-              () -> m_drive.setStationary(),
-              m_drive));
-  
-      new JoystickButton(m_controller, Button.kX.value)
-          .whileTrue(new RunCommand(
-              () -> m_lift.release(),
-              m_lift));
-    }
-  
-    @Override
-    public void robotInit() {
-      configureBindings();
-  
-      // If the doesn't work, comment it and uncomment the below drive function
-      m_drive.setDefaultCommand(
-          new RunCommand(
-              () -> m_drive.drive(
-                  OperatorConstants.kXSlewRateLimiter
-                      .calculate(MathUtil.applyDeadband(
-                          m_controller.getLeftY(),
-                          OperatorConstants.kStickDeadband)),
-                  -OperatorConstants.kYSlewRateLimiter
-                      .calculate(MathUtil.applyDeadband(
-                          m_controller.getLeftX(),
-                          OperatorConstants.kStickDeadband)),
-                  -OperatorConstants.kTSlewRateLimiter
-                      .calculate(MathUtil.applyDeadband(
-                          m_controller.getRightX(),
-                          OperatorConstants.kStickDeadband)),
-                  true),
-              m_drive));
-  
-      m_lift.setDefaultCommand(
-          new RunCommand(
-              () -> m_lift.move(OperatorConstants.kLiftSlewRateLimiter
-                  .calculate(m_controller.getRightTriggerAxis()
-                      - m_controller.getLeftTriggerAxis())),
-              m_lift));
-              double startTime = TimerFPGATimestamp();
-    }
-  
-    @Override
-    public void robotPeriodic() {
-      CommandScheduler.getInstance().run();
-    }
-  
-    @Override
-    public void autonomousInit() {
-      TrajectoryConfig config = new TrajectoryConfig(
-          AutoConstants.kMaxSpeed,
-          AutoConstants.kMaxAcceleration)
-          .setKinematics(DriveConstants.kDriveKinematics);
-  
-      Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
-        List.of(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(180)),
-            // End 2 meters straight behind of where we started, facing forward
-            new Pose2d(2, 0, new Rotation2d(0))),
-          config);
-  
-      var thetaController = new ProfiledPIDController(
-          1, 0, 0, AutoConstants.kThetaControllerConstraints);
-      thetaController.enableContinuousInput(-Math.PI, Math.PI);
-      SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-          trajectory,
-          m_drive::getPose, // Functional interface to feed supplier
-          DriveConstants.kDriveKinematics,
-  
-          // Position controllers
-          new PIDController(1, 0, 0),
-          new PIDController(1, 0, 0),
-          thetaController,
-          m_drive::setModuleStates,
-          m_drive);
-  
-      // Reset odometry to the starting pose of the trajectory.
-      m_drive.resetOdometry(trajectory.getInitialPose());
-  
-      // Run path following command, then stop at the end.
-      m_autonomousCommand = swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false));
-  
-      if (m_autonomousCommand != null) {
-        m_autonomousCommand.schedule();
-      }
-  
-      double startTime = Timer.getFPGATimestamp();
+public class Robot extends TimedRobot {
+  private final Drivetrain m_drive = new Drivetrain();
+  private final CoralSubsystem m_lift = new CoralSubsystem();
+  private final XboxController m_controller = new XboxController(OperatorConstants.kDriverControllerPort);
+  private Command m_autonomousCommand;
 
+  private void configureBindings() {
+    new JoystickButton(m_controller, Button.kRightBumper.value)
+        .whileTrue(new RunCommand(
+            () -> m_drive.setStationary(),
+            m_drive));
+
+    new JoystickButton(m_controller, Button.kX.value)
+        .whileTrue(new RunCommand(
+            () -> m_lift.release(),
+            m_lift));
   }
 
   @Override
-  public void autonomousPeriodic(){
-    double startTime;
-    while (Timer.getFPGATimestamp() - startTime <=10) {
+  public void robotInit() {
+    configureBindings();
 
+    // If the doesn't work, comment it and uncomment the below drive function
+    m_drive.setDefaultCommand(
+        new RunCommand(
+            () -> m_drive.drive(
+                OperatorConstants.kXSlewRateLimiter
+                    .calculate(MathUtil.applyDeadband(
+                        m_controller.getLeftY(),
+                        OperatorConstants.kStickDeadband)),
+                -OperatorConstants.kYSlewRateLimiter
+                    .calculate(MathUtil.applyDeadband(
+                        m_controller.getLeftX(),
+                        OperatorConstants.kStickDeadband)),
+                -OperatorConstants.kTSlewRateLimiter
+                    .calculate(MathUtil.applyDeadband(
+                        m_controller.getRightX(),
+                        OperatorConstants.kStickDeadband)),
+                true),
+            m_drive));
+
+    m_lift.setDefaultCommand(
+        new RunCommand(
+            () -> m_lift.move(OperatorConstants.kLiftSlewRateLimiter
+                .calculate(m_controller.getRightTriggerAxis()
+                    - m_controller.getLeftTriggerAxis())),
+            m_lift));
+  }
+
+  @Override
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
+
+  @Override
+  public void autonomousInit() {
+    TrajectoryConfig config = new TrajectoryConfig(
+        AutoConstants.kMaxSpeed,
+        AutoConstants.kMaxAcceleration)
+        .setKinematics(DriveConstants.kDriveKinematics);
+
+    Trajectory trajectory = TrajectoryGenerator.generateTrajectory(
+      List.of(
+          // Start at the origin facing the +X direction
+          new Pose2d(0, 0, new Rotation2d(0)),
+          // End 3 meters straight behind of where we started, facing forward
+          new Pose2d(2, 0, new Rotation2d(0))),
+        config);
+
+    var thetaController = new ProfiledPIDController(
+        1, 0, 0, AutoConstants.kThetaControllerConstraints);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
+        trajectory,
+        m_drive::getPose, // Functional interface to feed supplier
+        DriveConstants.kDriveKinematics,
+
+        // Position controllers
+        new PIDController(1, 0, 0),
+        new PIDController(1, 0, 0),
+        thetaController,
+        m_drive::setModuleStates,
+        m_drive);
+
+    // Reset odometry to the starting pose of the trajectory.
+    m_drive.resetOdometry(trajectory.getInitialPose());
+
+    // Run path following command, then stop at the end.
+    m_autonomousCommand = swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false));
+
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
     }
   }
 
