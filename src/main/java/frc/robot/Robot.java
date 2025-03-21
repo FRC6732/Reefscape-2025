@@ -87,8 +87,8 @@ public class Robot extends TimedRobot {
       List.of(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
-          // End 3 meters straight behind of where we started, facing forward
-          new Pose2d(2, 0, new Rotation2d(0))),
+          // End 3 meters straight behind of where we started, facing backward
+          new Pose2d(2, 0, new Rotation2d(180))),
         config);
 
     var thetaController = new ProfiledPIDController(
@@ -110,7 +110,10 @@ public class Robot extends TimedRobot {
     m_drive.resetOdometry(trajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
-    m_autonomousCommand = swerveControllerCommand.andThen(() -> m_drive.drive(0, 0, 0, false));
+    m_autonomousCommand = swerveControllerCommand
+      .andThen(() -> m_drive.drive(0, 0, 0, false))
+      .andThen(() -> m_lift.move(1.0)).withTimeout(2.0)
+      .andThen(() -> m_lift.release()).withTimeout(2.0);
 
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
